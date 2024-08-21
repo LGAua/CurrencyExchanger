@@ -43,29 +43,27 @@ public class ExchangeRateDao implements Dao<Integer, ExchangeRateEntity> {
             AND target_currency_id = ?;
             """;
 
-
     public static ExchangeRateDao getInstance() {
         return INSTANCE;
     }
 
     @SneakyThrows
-    private ExchangeRateEntity findByBaseIdAndTargetId(Integer baseId, Integer targetId) {
+    public Optional<ExchangeRateEntity> findByBaseIdAndTargetId(Integer baseId, Integer targetId) {
         try (Connection connection = ConnectionManager.open();
              PreparedStatement statement = connection.prepareStatement(FIND_BY_BASE_AND_TARGET_ID_SQL)) {
             statement.setInt(1, baseId);
             statement.setInt(2, targetId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return exchangeRateEntityBuilder(resultSet);
+                return Optional.of(exchangeRateEntityBuilder(resultSet));
             }
-            return null;
+            return Optional.empty();
         }
     }
 
     @Override
     @SneakyThrows
     public Optional<ExchangeRateEntity> findById(Integer id) {
-
         try (Connection connection = ConnectionManager.open();
              PreparedStatement statement = connection.prepareStatement(FIND_BY_ID_SQL)) {
             statement.setInt(1, id);
@@ -75,7 +73,6 @@ public class ExchangeRateDao implements Dao<Integer, ExchangeRateEntity> {
             }
         }
         return Optional.empty();
-
     }
 
     @Override
@@ -103,9 +100,7 @@ public class ExchangeRateDao implements Dao<Integer, ExchangeRateEntity> {
                 statement.setBigDecimal(3, entity.getRate());
                 statement.executeUpdate();
                 ResultSet resultSet = statement.getGeneratedKeys();
-
                 resultSet.next();
-
                 entity.setId(resultSet.getInt(1));
                 return Optional.of(entity);
             }
@@ -129,9 +124,8 @@ public class ExchangeRateDao implements Dao<Integer, ExchangeRateEntity> {
     }
 
     private boolean isEntityPresent(ExchangeRateEntity entity) {
-        ExchangeRateEntity exchangeRateEntity =
+        Optional<ExchangeRateEntity> exchangeRateEntity =
                 findByBaseIdAndTargetId(entity.getBaseCurrencyId(), entity.getTargetCurrencyId());
-        return exchangeRateEntity != null;
+        return exchangeRateEntity.isPresent();
     }
-
 }
