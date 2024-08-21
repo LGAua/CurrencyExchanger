@@ -1,6 +1,7 @@
 package com.lga.servlet;
 
 import com.lga.dto.ExchangeRateForSaveDto;
+import com.lga.exceptions.CurrencyNotFoundException;
 import com.lga.services.ExchangeRateService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,8 +14,7 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Optional;
 
-import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
-import static jakarta.servlet.http.HttpServletResponse.SC_CONFLICT;
+import static jakarta.servlet.http.HttpServletResponse.*;
 
 
 @WebServlet("/exchangeRates")
@@ -22,6 +22,7 @@ public class ExchangeRateServlet extends HttpServlet {
     private final ExchangeRateService exchangeRateService = ExchangeRateService.getInstance();
     private static final String FIELD_IS_EMPTY = "Bad request. One of required fields is empty";
     private static final String CURRENCY_ALREADY_EXISTS = "Conflict. Exchange rate already exists";
+    private static final String CURRENCY_NOT_FOUND = "Not found. Currency does not exist";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -45,7 +46,16 @@ public class ExchangeRateServlet extends HttpServlet {
             resp.sendError(SC_BAD_REQUEST, FIELD_IS_EMPTY);
             return;
         }
-        Optional<String> exchangeRateDto = exchangeRateService.save(exchangeRateForSaveDto);
+
+        Optional<String> exchangeRateDto;
+        try {
+            exchangeRateDto = exchangeRateService.save(exchangeRateForSaveDto);
+        } catch (CurrencyNotFoundException e) {
+            resp.sendError(SC_NOT_FOUND, CURRENCY_NOT_FOUND);
+            e.printStackTrace();
+            return;
+        }
+
         if (exchangeRateDto.isPresent()) {
             try (PrintWriter writer = resp.getWriter()) {
                 resp.setContentType("application/json");
@@ -59,8 +69,8 @@ public class ExchangeRateServlet extends HttpServlet {
 
     private boolean isValid(ExchangeRateForSaveDto entity) {
         if (entity.getRate() == null || entity.getRate().isEmpty()
-            || entity.getBaseCurrencyCode() == null || entity.getBaseCurrencyCode().isEmpty()
-            || entity.getTargetCurrencyCode() == null || entity.getTargetCurrencyCode().isEmpty()) {
+                || entity.getBaseCurrencyCode() == null || entity.getBaseCurrencyCode().isEmpty()
+                || entity.getTargetCurrencyCode() == null || entity.getTargetCurrencyCode().isEmpty()) {
             return false;
         }
         return true;

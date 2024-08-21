@@ -1,7 +1,7 @@
 package com.lga.dao;
 
-import com.lga.entity.CurrencyEntity;
 import com.lga.util.ConnectionManager;
+import com.lga.entity.CurrencyEntity;
 import lombok.SneakyThrows;
 
 import java.sql.Connection;
@@ -42,16 +42,16 @@ public class CurrenciesDao implements Dao<Integer, CurrencyEntity> {
     }
 
     @SneakyThrows
-    public CurrencyEntity findByCode(String code) {
+    public Optional<CurrencyEntity> findByCode(String code) {
         try (Connection connection = ConnectionManager.open();
              PreparedStatement statement = connection.prepareStatement(FIND_BY_CODE_SQL)) {
             statement.setString(1, code);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return currencyEntityBuilder(resultSet);
+                return Optional.of(currencyEntityBuilder(resultSet));
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
@@ -112,8 +112,8 @@ public class CurrenciesDao implements Dao<Integer, CurrencyEntity> {
     }
 
     private boolean isEntityPresent(CurrencyEntity entity) {
-        CurrencyEntity currencyEntity = findByCode(entity.getCode());
-        return currencyEntity != null;
+        Optional<CurrencyEntity> currencyEntity = findByCode(entity.getCode());
+        return currencyEntity.isPresent();
     }
 
 

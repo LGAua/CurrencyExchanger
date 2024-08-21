@@ -1,7 +1,5 @@
 package com.lga.dao;
 
-import com.lga.entity.CurrencyEntity;
-
 import com.lga.entity.ExchangeRateEntity;
 import com.lga.util.ConnectionManager;
 import lombok.NoArgsConstructor;
@@ -11,11 +9,9 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 import static lombok.AccessLevel.PRIVATE;
@@ -114,7 +110,6 @@ public class ExchangeRateDao implements Dao<Integer, ExchangeRateEntity> {
                 return Optional.of(entity);
             }
             return Optional.empty();
-
         }
     }
 
