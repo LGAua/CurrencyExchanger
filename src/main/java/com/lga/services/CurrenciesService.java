@@ -30,6 +30,11 @@ public class CurrenciesService {
                 .collect(toList());
     }
 
+    public Optional<String> findByCode(String code){
+        Optional<CurrencyEntity> currencyEntity = currenciesDao.findByCode(code);
+        return currencyEntity.map(this::convertToJson);
+    }
+
     public Optional<String> save(CurrencyForSaveDto currencyForSaveDto) {
         Optional<CurrencyEntity> currencyEntity = currenciesDao.save(CurrencyEntity.builder()
                 .code(currencyForSaveDto.getCode())

@@ -31,7 +31,6 @@ public class ExchangeRateServlet extends HttpServlet {
         try (PrintWriter writer = resp.getWriter()) {
             for (String exchangeRateDto : exchangeRateDtoList) {
                 writer.write(exchangeRateDto);
-
             }
         }
     }
@@ -52,7 +51,6 @@ public class ExchangeRateServlet extends HttpServlet {
             exchangeRateDto = exchangeRateService.save(exchangeRateForSaveDto);
         } catch (CurrencyNotFoundException e) {
             resp.sendError(SC_NOT_FOUND, CURRENCY_NOT_FOUND);
-            e.printStackTrace();
             return;
         }
 

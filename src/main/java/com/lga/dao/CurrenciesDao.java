@@ -57,7 +57,6 @@ public class CurrenciesDao implements Dao<Integer, CurrencyEntity> {
     @Override
     @SneakyThrows
     public Optional<CurrencyEntity> findById(Integer id) {
-
         try (Connection connection = ConnectionManager.open();
              PreparedStatement statement = connection.prepareStatement(FIND_BY_ID_SQL)) {
             statement.setInt(1, id);
@@ -67,7 +66,6 @@ public class CurrenciesDao implements Dao<Integer, CurrencyEntity> {
             }
         }
         return Optional.empty();
-
     }
 
     @Override
@@ -102,7 +100,6 @@ public class CurrenciesDao implements Dao<Integer, CurrencyEntity> {
                 return Optional.of(entity);
             }
             return Optional.empty();
-
         }
     }
 

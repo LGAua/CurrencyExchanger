@@ -30,7 +30,6 @@ public class ExchangeRateEntityMapper implements Mapper<ExchangeRateForSaveDto, 
                 .build();
     }
 
-    //Optional???
     private Integer findCurrencyIdByCode(String code) throws CurrencyNotFoundException{
         Optional<CurrencyEntity> currencyEntity = currenciesDao.findByCode(code);
         if(currencyEntity.isEmpty()){

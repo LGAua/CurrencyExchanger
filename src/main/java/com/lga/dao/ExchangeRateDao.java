@@ -21,8 +21,8 @@ public class ExchangeRateDao implements Dao<Integer, ExchangeRateEntity> {
     private static final ExchangeRateDao INSTANCE = new ExchangeRateDao();
 
     private static final String FIND_BY_ID_SQL = """
-            SELECT id,base_currency_id,target_currency_id,rate 
-            FROM exchange_rates 
+            SELECT id,base_currency_id,target_currency_id,rate
+            FROM exchange_rates\s
             WHERE id = ?;
             """;
 
