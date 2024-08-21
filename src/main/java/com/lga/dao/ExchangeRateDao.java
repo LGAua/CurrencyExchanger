@@ -1,6 +1,7 @@
 package com.lga.dao;
 
 import com.lga.entity.CurrencyEntity;
+
 import com.lga.entity.ExchangeRateEntity;
 import com.lga.util.ConnectionManager;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 import static lombok.AccessLevel.PRIVATE;
@@ -67,6 +69,7 @@ public class ExchangeRateDao implements Dao<Integer, ExchangeRateEntity> {
     @Override
     @SneakyThrows
     public Optional<ExchangeRateEntity> findById(Integer id) {
+
         try (Connection connection = ConnectionManager.open();
              PreparedStatement statement = connection.prepareStatement(FIND_BY_ID_SQL)) {
             statement.setInt(1, id);
@@ -76,6 +79,7 @@ public class ExchangeRateDao implements Dao<Integer, ExchangeRateEntity> {
             }
         }
         return Optional.empty();
+
     }
 
     @Override
@@ -110,6 +114,7 @@ public class ExchangeRateDao implements Dao<Integer, ExchangeRateEntity> {
                 return Optional.of(entity);
             }
             return Optional.empty();
+
         }
     }
 
@@ -133,4 +138,5 @@ public class ExchangeRateDao implements Dao<Integer, ExchangeRateEntity> {
                 findByBaseIdAndTargetId(entity.getBaseCurrencyId(), entity.getTargetCurrencyId());
         return exchangeRateEntity != null;
     }
+
 }

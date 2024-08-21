@@ -25,6 +25,7 @@ public class ExchangeRateService {
     private final ExchangeRateEntityMapper exchangeRateEntityMapper = ExchangeRateEntityMapper.getInstance();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+
     public static ExchangeRateService getInstance() {
         return INSTANCE;
     }
@@ -43,7 +44,7 @@ public class ExchangeRateService {
 
     @SneakyThrows
     private String convertToJson(ExchangeRateEntity entity) {
-            return objectMapper.writeValueAsString(exchangerRateDtoMapper.mapFrom(entity));
+        return objectMapper.writeValueAsString(exchangerRateDtoMapper.mapFrom(entity));
     }
 
 }

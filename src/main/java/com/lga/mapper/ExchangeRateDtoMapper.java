@@ -3,6 +3,7 @@ package com.lga.mapper;
 import com.lga.dao.CurrenciesDao;
 import com.lga.dto.ExchangeRateDto;
 import com.lga.entity.CurrencyEntity;
+
 import com.lga.entity.ExchangeRateEntity;
 
 import lombok.NoArgsConstructor;
@@ -34,4 +35,5 @@ public class ExchangeRateDtoMapper implements Mapper<ExchangeRateEntity, Exchang
         Optional<CurrencyEntity> currencyEntity = currenciesDao.findById(id);
         return currencyEntity.orElse(null);
     }
+
 }

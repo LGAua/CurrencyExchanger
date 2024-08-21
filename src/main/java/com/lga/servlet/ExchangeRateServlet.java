@@ -16,6 +16,7 @@ import java.util.Optional;
 import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static jakarta.servlet.http.HttpServletResponse.SC_CONFLICT;
 
+
 @WebServlet("/exchangeRates")
 public class ExchangeRateServlet extends HttpServlet {
     private final ExchangeRateService exchangeRateService = ExchangeRateService.getInstance();
@@ -29,6 +30,7 @@ public class ExchangeRateServlet extends HttpServlet {
         try (PrintWriter writer = resp.getWriter()) {
             for (String exchangeRateDto : exchangeRateDtoList) {
                 writer.write(exchangeRateDto);
+
             }
         }
     }

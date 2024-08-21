@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
 public class CurrenciesDao implements Dao<Integer, CurrencyEntity> {
 
     private static final CurrenciesDao INSTANCE = new CurrenciesDao();
@@ -56,6 +57,7 @@ public class CurrenciesDao implements Dao<Integer, CurrencyEntity> {
     @Override
     @SneakyThrows
     public Optional<CurrencyEntity> findById(Integer id) {
+
         try (Connection connection = ConnectionManager.open();
              PreparedStatement statement = connection.prepareStatement(FIND_BY_ID_SQL)) {
             statement.setInt(1, id);
@@ -65,6 +67,7 @@ public class CurrenciesDao implements Dao<Integer, CurrencyEntity> {
             }
         }
         return Optional.empty();
+
     }
 
     @Override
@@ -86,7 +89,7 @@ public class CurrenciesDao implements Dao<Integer, CurrencyEntity> {
     public Optional<CurrencyEntity> save(CurrencyEntity entity) {
         try (Connection connection = ConnectionManager.open();
              PreparedStatement statement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
-            if (!isEntityPresent(entity)){
+            if (!isEntityPresent(entity)) {
                 statement.setObject(1, entity.getCode());
                 statement.setObject(2, entity.getFullName());
                 statement.setObject(3, entity.getSign());
@@ -99,6 +102,7 @@ public class CurrenciesDao implements Dao<Integer, CurrencyEntity> {
                 return Optional.of(entity);
             }
             return Optional.empty();
+
         }
     }
 
@@ -107,10 +111,11 @@ public class CurrenciesDao implements Dao<Integer, CurrencyEntity> {
         return null;
     }
 
-    private boolean isEntityPresent(CurrencyEntity entity){
+    private boolean isEntityPresent(CurrencyEntity entity) {
         CurrencyEntity currencyEntity = findByCode(entity.getCode());
         return currencyEntity != null;
     }
+
 
     @SneakyThrows
     private CurrencyEntity currencyEntityBuilder(ResultSet resultSet) {
@@ -121,6 +126,5 @@ public class CurrenciesDao implements Dao<Integer, CurrencyEntity> {
                 .sign(resultSet.getObject("sign", String.class))
                 .build();
     }
-
 
 }

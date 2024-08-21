@@ -16,7 +16,7 @@ public class ConnectionManager {
         loadDriver();
     }
 
-    public static Connection open(){
+    public static Connection open() {
         try {
             return DriverManager.getConnection(URL);
         } catch (SQLException e) {
