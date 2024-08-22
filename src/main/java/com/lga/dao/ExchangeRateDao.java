@@ -43,6 +43,13 @@ public class ExchangeRateDao implements Dao<Integer, ExchangeRateEntity> {
             AND target_currency_id = ?;
             """;
 
+    private static final String UPDATE_SQL = """
+            UPDATE exchange_rates
+            SET rate = ?
+            WHERE base_currency_id = ?
+            AND target_currency_id = ?;
+            """;
+
     public static ExchangeRateDao getInstance() {
         return INSTANCE;
     }
@@ -92,9 +99,9 @@ public class ExchangeRateDao implements Dao<Integer, ExchangeRateEntity> {
     @Override
     @SneakyThrows
     public Optional<ExchangeRateEntity> save(ExchangeRateEntity entity) {
-        try (Connection connection = ConnectionManager.open();
-             PreparedStatement statement = connection.prepareStatement(SAVE_SQL, RETURN_GENERATED_KEYS)) {
-            if (!isEntityPresent(entity)) {
+        if (!isEntityPresent(entity)) {
+            try (Connection connection = ConnectionManager.open();
+                 PreparedStatement statement = connection.prepareStatement(SAVE_SQL, RETURN_GENERATED_KEYS)) {
                 statement.setInt(1, entity.getBaseCurrencyId());
                 statement.setInt(2, entity.getTargetCurrencyId());
                 statement.setBigDecimal(3, entity.getRate());
@@ -104,12 +111,25 @@ public class ExchangeRateDao implements Dao<Integer, ExchangeRateEntity> {
                 entity.setId(resultSet.getInt(1));
                 return Optional.of(entity);
             }
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
+
+    @SneakyThrows
     @Override
     public ExchangeRateEntity update(ExchangeRateEntity entity) {
+        if (isEntityPresent(entity)){
+            try (Connection connection = ConnectionManager.open();
+                 PreparedStatement statement = connection.prepareStatement(UPDATE_SQL)) {
+                statement.setBigDecimal(1, entity.getRate());
+                statement.setInt(2, entity.getBaseCurrencyId());
+                statement.setInt(3, entity.getTargetCurrencyId());
+                statement.executeUpdate();
+                entity.setId(findByBaseIdAndTargetId(entity.getBaseCurrencyId(), entity.getTargetCurrencyId()).get().getId());
+                return entity;
+            }
+        }
         return null;
     }
 

@@ -51,6 +51,13 @@ public class ExchangeRateService {
         return savedExchangeRateEntity.map(this::convertToJson);
     }
 
+    public Optional<String> update(ExchangeRateForSaveDto exchangeRateForSaveDto){
+        ExchangeRateEntity exchangeRateEntity = exchangeRateEntityMapper.mapFrom(exchangeRateForSaveDto);
+        ExchangeRateEntity updatedExchangeRateEntity = exchangeRateDao.update(exchangeRateEntity);
+        Optional<ExchangeRateEntity> upd = Optional.ofNullable(updatedExchangeRateEntity);
+        return upd.map(this::convertToJson);
+    }
+
     private Integer findCurrencyIdByCode(String baseCurrencyCode){
         Optional<CurrencyEntity> currencyEntity = currenciesDao.findByCode(baseCurrencyCode);
         return currencyEntity.orElseThrow().getId();
