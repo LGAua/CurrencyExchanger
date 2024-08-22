@@ -34,7 +34,7 @@ public class ExchangeRateServlet extends HttpServlet {
             }
         }
     }
-
+    //====================Check Rate for negative values
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ExchangeRateForSaveDto exchangeRateForSaveDto = ExchangeRateForSaveDto.builder()
