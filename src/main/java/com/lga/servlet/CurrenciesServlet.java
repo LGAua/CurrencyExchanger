@@ -1,7 +1,9 @@
 package com.lga.servlet;
 
 import com.lga.dto.CurrencyForSaveDto;
+import com.lga.entity.CurrencyEntity;
 import com.lga.services.CurrenciesService;
+import com.lga.util.JsonConverter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,18 +20,19 @@ import static jakarta.servlet.http.HttpServletResponse.SC_CONFLICT;
 
 @WebServlet("/currencies")
 public class CurrenciesServlet extends HttpServlet {
-    private final CurrenciesService currenciesService = CurrenciesService.getInstance();
     private static final String FIELD_IS_EMPTY = "Bad request. One of required fields is empty";
     private static final String CURRENCY_ALREADY_EXISTS = "Conflict. Currency with such code already exists";
 
+    private final CurrenciesService currenciesService = CurrenciesService.getInstance();
+    private final JsonConverter jsonConverter = JsonConverter.getInstance();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("application/json");
-        List<String> currencyEntityList = currenciesService.findAll();
+        List<CurrencyEntity> currencyEntityList = currenciesService.findAll();
         try (PrintWriter writer = resp.getWriter()) {
-            for (String currencyEntity : currencyEntityList) {
+            for (CurrencyEntity currencyEntity : currencyEntityList) {
                 System.out.println(currencyEntity);
-                writer.write(currencyEntity);
+                writer.write(jsonConverter.convertToJson(currencyEntity));
             }
         }
     }
@@ -45,11 +48,10 @@ public class CurrenciesServlet extends HttpServlet {
             resp.sendError(SC_BAD_REQUEST, FIELD_IS_EMPTY);
             return;
         }
-        Optional<String> currencyEntityJson = currenciesService.save(currencyForSaveDto);
+        Optional<CurrencyEntity> currencyEntityJson = currenciesService.save(currencyForSaveDto);
         if (currencyEntityJson.isPresent()) {
-            resp.setContentType("application/json");
             try (PrintWriter writer = resp.getWriter()) {
-                writer.write(currencyEntityJson.get());
+                writer.write(jsonConverter.convertToJson(currencyEntityJson.get()));
             }
         } else {
             resp.sendError(SC_CONFLICT, CURRENCY_ALREADY_EXISTS);

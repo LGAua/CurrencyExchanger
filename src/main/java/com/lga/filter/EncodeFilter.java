@@ -6,7 +6,7 @@ import jakarta.servlet.annotation.WebFilter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-@WebFilter(urlPatterns = {"/currencies","/currencies/*","/exchangeRates","/exchangeRates/*","/exchange"})
+@WebFilter(urlPatterns = {"/currencies","/currency/*","/exchangeRates","/exchangeRate/*","/exchange"})
 public class EncodeFilter implements Filter {
 
     @Override

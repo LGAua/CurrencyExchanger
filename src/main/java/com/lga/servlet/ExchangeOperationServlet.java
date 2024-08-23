@@ -1,9 +1,11 @@
 package com.lga.servlet;
 
 import com.lga.dto.ExchangeOperationInputDto;
+import com.lga.dto.ExchangeOperationOutputDto;
 import com.lga.exceptions.CurrencyNotFoundException;
 import com.lga.exceptions.ExchangeRatePairNotFoundException;
 import com.lga.services.ExchangeOperationService;
+import com.lga.util.JsonConverter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,10 +20,12 @@ import static jakarta.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 
 @WebServlet("/exchange")
 public class ExchangeOperationServlet extends HttpServlet {
-    private final ExchangeOperationService exchangeOperationService = ExchangeOperationService.getInstance();
     private static final String CURRENCY_NOT_FOUND = "Not found. Currency code does not exist";
     private static final String CURRENCY_PAIR_NOT_FOUND = "Not found. Currency pair does not exist";
     private static final String REQUEST_FIELDS_INVALID = "Bad request. Currency pair is invalid";
+
+    private final ExchangeOperationService exchangeOperationService = ExchangeOperationService.getInstance();
+    private final JsonConverter jsonConverter = JsonConverter.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -35,9 +39,9 @@ public class ExchangeOperationServlet extends HttpServlet {
             return;
         }
         try {
-            String exchangeOperationResult = exchangeOperationService.makeCurrencyExchange(exchangeOperationInputDto);
+            ExchangeOperationOutputDto exchangeOperationResult = exchangeOperationService.makeCurrencyExchange(exchangeOperationInputDto);
             try (PrintWriter printWriter = resp.getWriter()) {
-                printWriter.write(exchangeOperationResult);
+                printWriter.write(jsonConverter.convertToJson(exchangeOperationResult));
             }
         } catch (CurrencyNotFoundException e) {
             resp.sendError(SC_NOT_FOUND, CURRENCY_NOT_FOUND);

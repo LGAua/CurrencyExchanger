@@ -13,7 +13,7 @@ import java.util.Optional;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
-public class ExchangeRateEntityMapper implements Mapper<ExchangeRateForSaveDto, ExchangeRateEntity>{
+public class ExchangeRateEntityMapper implements Mapper<ExchangeRateForSaveDto, ExchangeRateEntity> {
     private static final ExchangeRateEntityMapper INSTANCE = new ExchangeRateEntityMapper();
     private final CurrenciesDao currenciesDao = CurrenciesDao.getInstance();
 
@@ -30,11 +30,11 @@ public class ExchangeRateEntityMapper implements Mapper<ExchangeRateForSaveDto, 
                 .build();
     }
 
-    private Integer findCurrencyIdByCode(String code) throws CurrencyNotFoundException{
+    private Integer findCurrencyIdByCode(String code) throws CurrencyNotFoundException {
         Optional<CurrencyEntity> currencyEntity = currenciesDao.findByCode(code);
-        if(currencyEntity.isEmpty()){
+        if (currencyEntity.isEmpty()) {
             throw new CurrencyNotFoundException();
         }
-        return currenciesDao.findByCode(code).get().getId();
+        return currencyEntity.get().getId();
     }
 }

@@ -1,16 +1,15 @@
 package com.lga.services;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lga.dao.CurrenciesDao;
 import com.lga.dao.ExchangeRateDao;
+import com.lga.dto.ExchangeRateDto;
 import com.lga.dto.ExchangeRateForSaveDto;
 import com.lga.entity.CurrencyEntity;
 import com.lga.entity.ExchangeRateEntity;
 import com.lga.mapper.ExchangeRateDtoMapper;
 import com.lga.mapper.ExchangeRateEntityMapper;
 import lombok.NoArgsConstructor;
-import lombok.SneakyThrows;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,45 +25,39 @@ public class ExchangeRateService {
     private final ExchangeRateDtoMapper exchangerRateDtoMapper = ExchangeRateDtoMapper.getInstance();
     private final ExchangeRateEntityMapper exchangeRateEntityMapper = ExchangeRateEntityMapper.getInstance();
     private final CurrenciesDao currenciesDao = CurrenciesDao.getInstance();
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public static ExchangeRateService getInstance() {
         return INSTANCE;
     }
 
-    public List<String> findAll() {
+    public List<ExchangeRateDto> findAll() {
         return exchangeRateDao.findAll().stream()
-                .map(this::convertToJson)
+                .map(exchangerRateDtoMapper::mapFrom)
                 .collect(toList());
     }
 
-    public Optional<String> findExchangeRateByCurrencyCode(String baseCurrencyCode, String targetCurrencyCode){
+    public Optional<ExchangeRateDto> findExchangeRateByCurrencyCode(String baseCurrencyCode, String targetCurrencyCode) {
         Integer baseCurrencyId = findCurrencyIdByCode(baseCurrencyCode);
         Integer targetCurrencyId = findCurrencyIdByCode(targetCurrencyCode);
-        Optional<ExchangeRateEntity> currencyPair = exchangeRateDao.findByBaseIdAndTargetId(baseCurrencyId, targetCurrencyId);
-        return currencyPair.map(this::convertToJson);
+        Optional<ExchangeRateEntity> exchangeRateEntity = exchangeRateDao.findByBaseIdAndTargetId(baseCurrencyId, targetCurrencyId);
+        return exchangeRateEntity.map(exchangerRateDtoMapper::mapFrom);
     }
 
-    public Optional<String> save(ExchangeRateForSaveDto exchangeRateForSaveDto) {
+    public Optional<ExchangeRateDto> save(ExchangeRateForSaveDto exchangeRateForSaveDto) {
         ExchangeRateEntity exchangeRateEntity = exchangeRateEntityMapper.mapFrom(exchangeRateForSaveDto);
         Optional<ExchangeRateEntity> savedExchangeRateEntity = exchangeRateDao.save(exchangeRateEntity);
-        return savedExchangeRateEntity.map(this::convertToJson);
+        return savedExchangeRateEntity.map(exchangerRateDtoMapper::mapFrom);
     }
 
-    public Optional<String> update(ExchangeRateForSaveDto exchangeRateForSaveDto){
+    public Optional<ExchangeRateDto> update(ExchangeRateForSaveDto exchangeRateForSaveDto) {
         ExchangeRateEntity exchangeRateEntity = exchangeRateEntityMapper.mapFrom(exchangeRateForSaveDto);
-        ExchangeRateEntity updatedExchangeRateEntity = exchangeRateDao.update(exchangeRateEntity);
-        Optional<ExchangeRateEntity> upd = Optional.ofNullable(updatedExchangeRateEntity);
-        return upd.map(this::convertToJson);
+        ExchangeRateEntity updateResult = exchangeRateDao.update(exchangeRateEntity);
+        Optional<ExchangeRateEntity> updatedExchangeRateEntity = Optional.ofNullable(updateResult);
+        return updatedExchangeRateEntity.map(exchangerRateDtoMapper::mapFrom);
     }
 
-    private Integer findCurrencyIdByCode(String baseCurrencyCode){
+    private Integer findCurrencyIdByCode(String baseCurrencyCode) {
         Optional<CurrencyEntity> currencyEntity = currenciesDao.findByCode(baseCurrencyCode);
         return currencyEntity.orElseThrow().getId();
     }
-    @SneakyThrows
-    private String convertToJson(ExchangeRateEntity entity) {
-        return objectMapper.writeValueAsString(exchangerRateDtoMapper.mapFrom(entity));
-    }
-
 }

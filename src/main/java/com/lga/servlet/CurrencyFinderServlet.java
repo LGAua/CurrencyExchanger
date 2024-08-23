@@ -1,6 +1,8 @@
 package com.lga.servlet;
 
+import com.lga.entity.CurrencyEntity;
 import com.lga.services.CurrenciesService;
+import com.lga.util.JsonConverter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,24 +15,24 @@ import java.util.Optional;
 
 import static jakarta.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 
-@WebServlet("/currencies/*")
+@WebServlet("/currency/*")
 public class CurrencyFinderServlet extends HttpServlet {
-    private final CurrenciesService currenciesService = CurrenciesService.getInstance();
     private static final String CURRENCY_NOT_FOUND = "Not found. Currency does not exist";
+
+    private final CurrenciesService currenciesService = CurrenciesService.getInstance();
+    private final JsonConverter jsonConverter = JsonConverter.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String uri = req.getRequestURI();
-        String currencyCode = uri.replace("/currencies/", "").toUpperCase();
-        Optional<String> currencyEntity = currenciesService.findByCode(currencyCode);
+        String currencyCode = uri.replace("/currency/", "").toUpperCase();
+        Optional<CurrencyEntity> currencyEntity = currenciesService.findByCode(currencyCode);
         if (currencyEntity.isPresent()) {
             try (PrintWriter printWriter = resp.getWriter()) {
-                resp.setContentType("application/json");
-                printWriter.write(currencyEntity.get());
+                printWriter.write(jsonConverter.convertToJson(currencyEntity.get()));
             }
         } else {
             resp.sendError(SC_NOT_FOUND, CURRENCY_NOT_FOUND);
         }
-        System.out.println(currencyCode);
     }
 }
