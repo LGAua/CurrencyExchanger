@@ -14,7 +14,10 @@ import java.io.PrintWriter;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static com.lga.util.HttpResponseTextConstants.*;
+import static com.lga.util.HttpResponseTextConstants.CURRENCY_PAIR_NOT_FOUND;
+import static com.lga.util.HttpResponseTextConstants.CURRENCY_PAIR_INVALID;
+import static com.lga.util.HttpResponseTextConstants.CURRENCY_NOT_FOUND;
+import static com.lga.util.HttpResponseTextConstants.CURRENCY_RATE_ABSENT;
 import static com.lga.util.SingletonConstants.ServiceConstants.exchangeRateService;
 import static com.lga.util.SingletonConstants.UtilConstant.jsonConverter;
 import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;

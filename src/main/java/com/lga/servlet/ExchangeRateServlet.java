@@ -14,10 +14,14 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Optional;
 
-import static com.lga.util.HttpResponseTextConstants.*;
+import static com.lga.util.HttpResponseTextConstants.FIELD_IS_EMPTY;
+import static com.lga.util.HttpResponseTextConstants.CURRENCY_NOT_FOUND;
+import static com.lga.util.HttpResponseTextConstants.EXCHANGE_RATE_ALREADY_EXISTS;
 import static com.lga.util.SingletonConstants.ServiceConstants.exchangeRateService;
 import static com.lga.util.SingletonConstants.UtilConstant.jsonConverter;
-import static jakarta.servlet.http.HttpServletResponse.*;
+import static jakarta.servlet.http.HttpServletResponse.SC_CONFLICT;
+import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
+import static jakarta.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 
 
 @WebServlet("/exchangeRates")

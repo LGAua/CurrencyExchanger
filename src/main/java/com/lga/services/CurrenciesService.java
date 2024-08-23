@@ -28,12 +28,11 @@ public class CurrenciesService {
     }
 
     public Optional<CurrencyEntity> save(CurrencyForSaveDto currencyForSaveDto) {
-        Optional<CurrencyEntity> currencyEntity = currenciesDao.save(CurrencyEntity.builder()
+        return currenciesDao.save(CurrencyEntity.builder()
                 .code(currencyForSaveDto.getCode())
                 .fullName(currencyForSaveDto.getFullName())
                 .sign(currencyForSaveDto.getSign())
                 .build());
-        return currencyEntity;
     }
 }
 

@@ -1,22 +1,19 @@
 package com.lga.mapper;
 
-import com.lga.dto.ExchangeOperationInputDto;
+import com.lga.dto.ExchangeOperationIntermediateDto;
 import com.lga.dto.ExchangeOperationOutputDto;
 import com.lga.entity.CurrencyEntity;
-import com.lga.entity.ExchangeRateEntity;
 import com.lga.exceptions.CurrencyNotFoundException;
-import com.lga.exceptions.ExchangeRatePairNotFoundException;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 import static com.lga.util.SingletonConstants.DaoConstants.currenciesDao;
-import static com.lga.util.SingletonConstants.DaoConstants.exchangeRateDao;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
-public class ExchangeOperationOutputMapper implements Mapper<ExchangeOperationInputDto, ExchangeOperationOutputDto> {
+public class ExchangeOperationOutputMapper implements Mapper<ExchangeOperationIntermediateDto, ExchangeOperationOutputDto> {
+
     private static final ExchangeOperationOutputMapper INSTANCE = new ExchangeOperationOutputMapper();
 
     public static ExchangeOperationOutputMapper getInstance() {
@@ -24,41 +21,21 @@ public class ExchangeOperationOutputMapper implements Mapper<ExchangeOperationIn
     }
 
     @Override
-    public ExchangeOperationOutputDto mapFrom(ExchangeOperationInputDto object) {
-        ExchangeOperationOutputDto outputDto = ExchangeOperationOutputDto.builder()
-                .baseCurrencyEntity(findCurrencyEntityByCode(object.getBaseCurrencyCode()))
-                .targetCurrencyEntity(findCurrencyEntityByCode(object.getTargetCurrencyCode()))
-                .rate(findExchangeRate(object.getBaseCurrencyCode(), object.getTargetCurrencyCode()))
-                .amount(Integer.parseInt(object.getAmount()))
-                .convertedAmount(calculateAmount(object))
+    public ExchangeOperationOutputDto mapFrom(ExchangeOperationIntermediateDto object) {
+        return ExchangeOperationOutputDto.builder()
+                .baseCurrencyEntity(findCurrencyEntityById(object.getBaseCurrencyId()))
+                .targetCurrencyEntity(findCurrencyEntityById(object.getTargetCurrencyId()))
+                .rate(object.getRate())
+                .amount(object.getAmount())
+                .convertedAmount(object.getConvertedAmount())
                 .build();
-
-        return outputDto;
     }
 
-    private CurrencyEntity findCurrencyEntityByCode(String code) throws CurrencyNotFoundException {
-        Optional<CurrencyEntity> currencyEntity = currenciesDao.findByCode(code);
+    private CurrencyEntity findCurrencyEntityById(Integer currencyId) throws CurrencyNotFoundException {
+        Optional<CurrencyEntity> currencyEntity = currenciesDao.findById(currencyId);
         if (currencyEntity.isEmpty()) {
             throw new CurrencyNotFoundException();
         }
         return currencyEntity.get();
-    }
-
-    private BigDecimal findExchangeRate(String baseCurrencyCode, String targetCurrencyCode) throws ExchangeRatePairNotFoundException {
-        CurrencyEntity base = currenciesDao.findByCode(baseCurrencyCode).get();
-        CurrencyEntity target = currenciesDao.findByCode(targetCurrencyCode).get();
-        Optional<ExchangeRateEntity> exchangeRateEntity = exchangeRateDao.findByBaseIdAndTargetId(base.getId(), target.getId());
-        if (exchangeRateEntity.isEmpty()) {
-            throw new ExchangeRatePairNotFoundException();
-        }
-        return exchangeRateEntity.get().getRate();
-    }
-
-    private BigDecimal calculateAmount(ExchangeOperationInputDto object) {
-        CurrencyEntity base = currenciesDao.findByCode(object.getBaseCurrencyCode()).get();
-        CurrencyEntity target = currenciesDao.findByCode(object.getTargetCurrencyCode()).get();
-        BigDecimal rate = exchangeRateDao.findByBaseIdAndTargetId(base.getId(), target.getId()).get().getRate();
-        BigDecimal amount = new BigDecimal(Integer.parseInt(object.getAmount()));
-        return rate.multiply(amount);
     }
 }
