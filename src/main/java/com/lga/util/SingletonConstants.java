@@ -11,7 +11,7 @@ import com.lga.services.ExchangeRateService;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class Constants {
+public class SingletonConstants {
     public static class DaoConstants {
         public static final ExchangeRateDao exchangeRateDao = ExchangeRateDao.getInstance();
         public static final CurrenciesDao currenciesDao = CurrenciesDao.getInstance();

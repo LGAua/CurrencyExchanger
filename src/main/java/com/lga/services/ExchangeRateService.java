@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.Optional;
 
-import static com.lga.util.Constants.DaoConstants.currenciesDao;
-import static com.lga.util.Constants.DaoConstants.exchangeRateDao;
-import static com.lga.util.Constants.MapperConstants.exchangeRateEntityMapper;
-import static com.lga.util.Constants.MapperConstants.exchangerRateDtoMapper;
+import static com.lga.util.SingletonConstants.DaoConstants.currenciesDao;
+import static com.lga.util.SingletonConstants.DaoConstants.exchangeRateDao;
+import static com.lga.util.SingletonConstants.MapperConstants.exchangeRateEntityMapper;
+import static com.lga.util.SingletonConstants.MapperConstants.exchangerRateDtoMapper;
 import static java.util.stream.Collectors.toList;
 import static lombok.AccessLevel.PRIVATE;
 

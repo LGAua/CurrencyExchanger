@@ -1,7 +1,6 @@
 package com.lga.services;
 
 
-import com.lga.dao.CurrenciesDao;
 import com.lga.dto.CurrencyForSaveDto;
 import com.lga.entity.CurrencyEntity;
 import lombok.NoArgsConstructor;
@@ -9,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.Optional;
 
-import static com.lga.util.Constants.DaoConstants.currenciesDao;
+import static com.lga.util.SingletonConstants.DaoConstants.currenciesDao;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)

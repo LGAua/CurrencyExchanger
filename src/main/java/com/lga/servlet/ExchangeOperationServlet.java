@@ -4,8 +4,6 @@ import com.lga.dto.ExchangeOperationInputDto;
 import com.lga.dto.ExchangeOperationOutputDto;
 import com.lga.exceptions.CurrencyNotFoundException;
 import com.lga.exceptions.ExchangeRatePairNotFoundException;
-import com.lga.services.ExchangeOperationService;
-import com.lga.util.JsonConverter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,18 +13,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import static com.lga.util.Constants.ServiceConstants.exchangeOperationService;
-import static com.lga.util.Constants.UtilConstant.jsonConverter;
+import static com.lga.util.HttpResponseTextConstants.*;
+import static com.lga.util.SingletonConstants.ServiceConstants.exchangeOperationService;
+import static com.lga.util.SingletonConstants.UtilConstant.jsonConverter;
 import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static jakarta.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 
 @WebServlet("/exchange")
 public class ExchangeOperationServlet extends HttpServlet {
-    private static final String CURRENCY_NOT_FOUND = "Not found. Currency code does not exist";
-    private static final String CURRENCY_PAIR_NOT_FOUND = "Not found. Currency pair does not exist";
-    private static final String REQUEST_FIELDS_INVALID = "Bad request. Currency pair is invalid";
-
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ExchangeOperationInputDto exchangeOperationInputDto = ExchangeOperationInputDto.builder()

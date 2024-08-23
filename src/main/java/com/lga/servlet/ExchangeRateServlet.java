@@ -14,17 +14,14 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Optional;
 
-import static com.lga.util.Constants.ServiceConstants.exchangeRateService;
-import static com.lga.util.Constants.UtilConstant.jsonConverter;
+import static com.lga.util.HttpResponseTextConstants.*;
+import static com.lga.util.SingletonConstants.ServiceConstants.exchangeRateService;
+import static com.lga.util.SingletonConstants.UtilConstant.jsonConverter;
 import static jakarta.servlet.http.HttpServletResponse.*;
 
 
 @WebServlet("/exchangeRates")
 public class ExchangeRateServlet extends HttpServlet {
-    private static final String FIELD_IS_EMPTY = "Bad request. One of required fields is empty";
-    private static final String CURRENCY_ALREADY_EXISTS = "Conflict. Exchange rate already exists";
-    private static final String CURRENCY_NOT_FOUND = "Not found. Currency does not exist";
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<ExchangeRateDto> exchangeRateDtoList = exchangeRateService.findAll();
@@ -35,7 +32,6 @@ public class ExchangeRateServlet extends HttpServlet {
         }
     }
 
-    //====================Check Rate for negative values
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ExchangeRateForSaveDto exchangeRateForSaveDto = ExchangeRateForSaveDto.builder()
@@ -60,12 +56,12 @@ public class ExchangeRateServlet extends HttpServlet {
                 writer.write(jsonConverter.convertToJson(exchangeRateDto.get()));
             }
         } else {
-            resp.sendError(SC_CONFLICT, CURRENCY_ALREADY_EXISTS);
+            resp.sendError(SC_CONFLICT, EXCHANGE_RATE_ALREADY_EXISTS);
         }
     }
 
     private boolean isValid(ExchangeRateForSaveDto entity) {
-        if (entity.getRate() == null || entity.getRate().isEmpty()
+        if (entity.getRate() == null || entity.getRate().isEmpty() || Integer.parseInt(entity.getRate()) < 0
                 || entity.getBaseCurrencyCode() == null || entity.getBaseCurrencyCode().isEmpty()
                 || entity.getTargetCurrencyCode() == null || entity.getTargetCurrencyCode().isEmpty()) {
             return false;

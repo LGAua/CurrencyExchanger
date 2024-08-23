@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import static com.lga.util.Constants.DaoConstants.currenciesDao;
-import static com.lga.util.Constants.DaoConstants.exchangeRateDao;
+import static com.lga.util.SingletonConstants.DaoConstants.currenciesDao;
+import static com.lga.util.SingletonConstants.DaoConstants.exchangeRateDao;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)

@@ -1,8 +1,6 @@
 package com.lga.servlet;
 
 import com.lga.entity.CurrencyEntity;
-import com.lga.services.CurrenciesService;
-import com.lga.util.JsonConverter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,14 +11,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Optional;
 
-import static com.lga.util.Constants.ServiceConstants.currenciesService;
-import static com.lga.util.Constants.UtilConstant.jsonConverter;
+import static com.lga.util.HttpResponseTextConstants.CURRENCY_NOT_FOUND;
+import static com.lga.util.SingletonConstants.ServiceConstants.currenciesService;
+import static com.lga.util.SingletonConstants.UtilConstant.jsonConverter;
 import static jakarta.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 
 @WebServlet("/currency/*")
 public class CurrencyFinderServlet extends HttpServlet {
-    private static final String CURRENCY_NOT_FOUND = "Not found. Currency does not exist";
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String uri = req.getRequestURI();

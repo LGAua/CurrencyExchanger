@@ -1,6 +1,5 @@
 package com.lga.mapper;
 
-import com.lga.dao.CurrenciesDao;
 import com.lga.dto.ExchangeRateDto;
 import com.lga.entity.CurrencyEntity;
 
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Optional;
 
-import static com.lga.util.Constants.DaoConstants.currenciesDao;
+import static com.lga.util.SingletonConstants.DaoConstants.currenciesDao;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)

@@ -2,8 +2,6 @@ package com.lga.servlet;
 
 import com.lga.dto.CurrencyForSaveDto;
 import com.lga.entity.CurrencyEntity;
-import com.lga.services.CurrenciesService;
-import com.lga.util.JsonConverter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,17 +12,17 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Optional;
-import static com.lga.util.Constants.ServiceConstants.currenciesService;
-import static com.lga.util.Constants.UtilConstant.jsonConverter;
+
+import static com.lga.util.HttpResponseTextConstants.CURRENCY_ALREADY_EXISTS;
+import static com.lga.util.HttpResponseTextConstants.FIELD_IS_EMPTY;
+import static com.lga.util.SingletonConstants.ServiceConstants.currenciesService;
+import static com.lga.util.SingletonConstants.UtilConstant.jsonConverter;
 
 import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static jakarta.servlet.http.HttpServletResponse.SC_CONFLICT;
 
 @WebServlet("/currencies")
 public class CurrenciesServlet extends HttpServlet {
-    private static final String FIELD_IS_EMPTY = "Bad request. One of required fields is empty";
-    private static final String CURRENCY_ALREADY_EXISTS = "Conflict. Currency with such code already exists";
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<CurrencyEntity> currencyEntityList = currenciesService.findAll();
