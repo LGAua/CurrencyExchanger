@@ -1,30 +1,25 @@
 package com.lga.services;
 
 
-import com.lga.dao.CurrenciesDao;
-import com.lga.dao.ExchangeRateDao;
 import com.lga.dto.ExchangeRateDto;
 import com.lga.dto.ExchangeRateForSaveDto;
 import com.lga.entity.CurrencyEntity;
 import com.lga.entity.ExchangeRateEntity;
-import com.lga.mapper.ExchangeRateDtoMapper;
-import com.lga.mapper.ExchangeRateEntityMapper;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
 
+import static com.lga.util.Constants.DaoConstants.currenciesDao;
+import static com.lga.util.Constants.DaoConstants.exchangeRateDao;
+import static com.lga.util.Constants.MapperConstants.exchangeRateEntityMapper;
+import static com.lga.util.Constants.MapperConstants.exchangerRateDtoMapper;
 import static java.util.stream.Collectors.toList;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
 public class ExchangeRateService {
     private static final ExchangeRateService INSTANCE = new ExchangeRateService();
-
-    private final ExchangeRateDao exchangeRateDao = ExchangeRateDao.getInstance();
-    private final ExchangeRateDtoMapper exchangerRateDtoMapper = ExchangeRateDtoMapper.getInstance();
-    private final ExchangeRateEntityMapper exchangeRateEntityMapper = ExchangeRateEntityMapper.getInstance();
-    private final CurrenciesDao currenciesDao = CurrenciesDao.getInstance();
 
     public static ExchangeRateService getInstance() {
         return INSTANCE;

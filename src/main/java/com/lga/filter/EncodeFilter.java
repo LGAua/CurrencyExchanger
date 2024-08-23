@@ -8,7 +8,6 @@ import java.nio.charset.StandardCharsets;
 
 @WebFilter(urlPatterns = {"/currencies","/currency/*","/exchangeRates","/exchangeRate/*","/exchange"})
 public class EncodeFilter implements Filter {
-
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         servletRequest.setCharacterEncoding(StandardCharsets.UTF_8.name());

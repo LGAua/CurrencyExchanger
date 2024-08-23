@@ -13,14 +13,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Optional;
 
+import static com.lga.util.Constants.ServiceConstants.currenciesService;
+import static com.lga.util.Constants.UtilConstant.jsonConverter;
 import static jakarta.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 
 @WebServlet("/currency/*")
 public class CurrencyFinderServlet extends HttpServlet {
     private static final String CURRENCY_NOT_FOUND = "Not found. Currency does not exist";
-
-    private final CurrenciesService currenciesService = CurrenciesService.getInstance();
-    private final JsonConverter jsonConverter = JsonConverter.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

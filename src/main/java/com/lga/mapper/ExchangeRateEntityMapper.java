@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+import static com.lga.util.Constants.DaoConstants.currenciesDao;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
 public class ExchangeRateEntityMapper implements Mapper<ExchangeRateForSaveDto, ExchangeRateEntity> {
     private static final ExchangeRateEntityMapper INSTANCE = new ExchangeRateEntityMapper();
-    private final CurrenciesDao currenciesDao = CurrenciesDao.getInstance();
 
     public static ExchangeRateEntityMapper getInstance() {
         return INSTANCE;

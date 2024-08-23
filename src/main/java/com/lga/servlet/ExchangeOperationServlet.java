@@ -15,6 +15,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import static com.lga.util.Constants.ServiceConstants.exchangeOperationService;
+import static com.lga.util.Constants.UtilConstant.jsonConverter;
 import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static jakarta.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 
@@ -24,8 +26,6 @@ public class ExchangeOperationServlet extends HttpServlet {
     private static final String CURRENCY_PAIR_NOT_FOUND = "Not found. Currency pair does not exist";
     private static final String REQUEST_FIELDS_INVALID = "Bad request. Currency pair is invalid";
 
-    private final ExchangeOperationService exchangeOperationService = ExchangeOperationService.getInstance();
-    private final JsonConverter jsonConverter = JsonConverter.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

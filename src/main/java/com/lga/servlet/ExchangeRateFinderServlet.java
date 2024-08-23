@@ -16,6 +16,8 @@ import java.io.PrintWriter;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import static com.lga.util.Constants.ServiceConstants.exchangeRateService;
+import static com.lga.util.Constants.UtilConstant.jsonConverter;
 import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static jakarta.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 
@@ -26,8 +28,6 @@ public class ExchangeRateFinderServlet extends HttpServlet {
     private static final String CURRENCY_PAIR_INVALID = "Bad request. Currency pair is invalid";
     private static final String CURRENCY_RATE_ABSENT = "Bad request. Currency rate is absent";
 
-    private final ExchangeRateService exchangeRateService = ExchangeRateService.getInstance();
-    private final JsonConverter jsonConverter = JsonConverter.getInstance();
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

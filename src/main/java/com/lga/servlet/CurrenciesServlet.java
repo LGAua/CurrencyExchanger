@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Optional;
+import static com.lga.util.Constants.ServiceConstants.currenciesService;
+import static com.lga.util.Constants.UtilConstant.jsonConverter;
 
 import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static jakarta.servlet.http.HttpServletResponse.SC_CONFLICT;
@@ -22,9 +24,6 @@ import static jakarta.servlet.http.HttpServletResponse.SC_CONFLICT;
 public class CurrenciesServlet extends HttpServlet {
     private static final String FIELD_IS_EMPTY = "Bad request. One of required fields is empty";
     private static final String CURRENCY_ALREADY_EXISTS = "Conflict. Currency with such code already exists";
-
-    private final CurrenciesService currenciesService = CurrenciesService.getInstance();
-    private final JsonConverter jsonConverter = JsonConverter.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

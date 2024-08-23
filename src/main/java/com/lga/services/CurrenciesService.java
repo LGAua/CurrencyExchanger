@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.Optional;
 
+import static com.lga.util.Constants.DaoConstants.currenciesDao;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
 public class CurrenciesService {
     private static final CurrenciesService INSTANCE = new CurrenciesService();
-    private final CurrenciesDao currenciesDao = CurrenciesDao.getInstance();
 
     public static CurrenciesService getInstance() {
         return INSTANCE;
@@ -24,7 +24,7 @@ public class CurrenciesService {
         return currenciesDao.findAll();
     }
 
-    public Optional<CurrencyEntity> findByCode(String code){
+    public Optional<CurrencyEntity> findByCode(String code) {
         return currenciesDao.findByCode(code);
     }
 

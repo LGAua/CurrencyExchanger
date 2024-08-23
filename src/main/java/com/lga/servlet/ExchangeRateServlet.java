@@ -3,8 +3,6 @@ package com.lga.servlet;
 import com.lga.dto.ExchangeRateDto;
 import com.lga.dto.ExchangeRateForSaveDto;
 import com.lga.exceptions.CurrencyNotFoundException;
-import com.lga.services.ExchangeRateService;
-import com.lga.util.JsonConverter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,6 +14,8 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Optional;
 
+import static com.lga.util.Constants.ServiceConstants.exchangeRateService;
+import static com.lga.util.Constants.UtilConstant.jsonConverter;
 import static jakarta.servlet.http.HttpServletResponse.*;
 
 
@@ -24,9 +24,6 @@ public class ExchangeRateServlet extends HttpServlet {
     private static final String FIELD_IS_EMPTY = "Bad request. One of required fields is empty";
     private static final String CURRENCY_ALREADY_EXISTS = "Conflict. Exchange rate already exists";
     private static final String CURRENCY_NOT_FOUND = "Not found. Currency does not exist";
-
-    private final ExchangeRateService exchangeRateService = ExchangeRateService.getInstance();
-    private final JsonConverter jsonConverter = JsonConverter.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

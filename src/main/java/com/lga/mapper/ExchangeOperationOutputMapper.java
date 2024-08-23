@@ -1,7 +1,5 @@
 package com.lga.mapper;
 
-import com.lga.dao.CurrenciesDao;
-import com.lga.dao.ExchangeRateDao;
 import com.lga.dto.ExchangeOperationInputDto;
 import com.lga.dto.ExchangeOperationOutputDto;
 import com.lga.entity.CurrencyEntity;
@@ -13,14 +11,13 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+import static com.lga.util.Constants.DaoConstants.currenciesDao;
+import static com.lga.util.Constants.DaoConstants.exchangeRateDao;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
 public class ExchangeOperationOutputMapper implements Mapper<ExchangeOperationInputDto, ExchangeOperationOutputDto> {
     private static final ExchangeOperationOutputMapper INSTANCE = new ExchangeOperationOutputMapper();
-
-    private final CurrenciesDao currenciesDao = CurrenciesDao.getInstance();
-    private final ExchangeRateDao exchangeRateDao = ExchangeRateDao.getInstance();
 
     public static ExchangeOperationOutputMapper getInstance() {
         return INSTANCE;
@@ -51,7 +48,7 @@ public class ExchangeOperationOutputMapper implements Mapper<ExchangeOperationIn
         CurrencyEntity base = currenciesDao.findByCode(baseCurrencyCode).get();
         CurrencyEntity target = currenciesDao.findByCode(targetCurrencyCode).get();
         Optional<ExchangeRateEntity> exchangeRateEntity = exchangeRateDao.findByBaseIdAndTargetId(base.getId(), target.getId());
-        if (exchangeRateEntity.isEmpty()){
+        if (exchangeRateEntity.isEmpty()) {
             throw new ExchangeRatePairNotFoundException();
         }
         return exchangeRateEntity.get().getRate();
