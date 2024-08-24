@@ -1,0 +1,242 @@
+{
+	"info": {
+		"_postman_id": "722756a5-d053-4d5e-914c-87d595108705",
+		"name": "ExchangeRate API Postman-Collection",
+		"description": "Bellow prescribed all available Http-Requests and possible Http-Response for CurrencyExchanger API ([GitHub Repository](https://github.com/LGAua/CurrencyExchanger)).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37612690"
+	},
+	"item": [
+		{
+			"name": "Get All Currencies",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/currencies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"currencies"
+					]
+				},
+				"description": "Get a JSON list of all currencies available\n\nResponse example:  \nStartFragment\n\n``` json\n[\n    {\n        \"id\": 0,\n        \"name\": \"United States dollar\",\n        \"code\": \"USD\",\n        \"sign\": \"$\"\n    },   \n    {\n        \"id\": 0,\n        \"name\": \"Euro\",\n        \"code\": \"EUR\",\n        \"sign\": \"€\"\n    }\n]\n\n ```\n\nEndFragment\n\nPossible HTTP-response code status:\n\n200 - Success."
+			},
+			"response": []
+		},
+		{
+			"name": "Get specific currency",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:8080/currency/USD",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"currency",
+						"USD"
+					]
+				},
+				"description": "Get a JSON of all spesific currency.\n\nResponse example:\n\nStartFragment\n\n``` json\n{\n    \"id\": 0,\n    \"name\": \"Euro\",\n    \"code\": \"EUR\",\n    \"sign\": \"€\"\n}\n\n ```\n\nEndFragment\n\nPossible HTTP-response code status:\n\n200 - Success.\n\n404 - Not found. Currency code does not exist."
+			},
+			"response": []
+		},
+		{
+			"name": "Post new Currency",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Yuan"
+						},
+						{
+							"key": "code",
+							"value": "CNY"
+						},
+						{
+							"key": "sign",
+							"value": "¥"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/currencies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"currencies"
+					]
+				},
+				"description": "Post new currency in Database. Data is transfered in HTTP-response body (x-www-form-urlencoded). Form's fields - _name, code ,sign._\n\nResponse will contain JSON of new currency including id:\n\nStartFragment\n\n``` json\n{\n    \"id\": 0,\n    \"name\": \"Euro\",\n    \"code\": \"EUR\",\n    \"sign\": \"€\"\n}\n\n ```\n\nEndFragment\n\nPossible HTTP-response code status:\n\n201 - Success.\n\n400 - Bad Request. One of reuired fields is empty.\n\n409 - Conflict. Currency with such code already exists."
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Exchange Rates",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/exchangeRates",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"exchangeRates"
+					]
+				},
+				"description": "Get a JSON list of all Exchange Rates available\n\nResponse example:\n\nStartFragment\n\n``` json\n[\n    {\n        \"id\": 0,\n        \"baseCurrency\": {\n            \"id\": 0,\n            \"name\": \"United States dollar\",\n            \"code\": \"USD\",\n            \"sign\": \"$\"\n        },\n        \"targetCurrency\": {\n            \"id\": 1,\n            \"name\": \"Euro\",\n            \"code\": \"EUR\",\n            \"sign\": \"€\"\n        },\n        \"rate\": 0.99\n    }\n]\n\n ```\n\nEndFragment\n\nPossible HTTP-response code status:\n\n200 - Success."
+			},
+			"response": []
+		},
+		{
+			"name": "Get specific Exchange Rate",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/exchangeRates/USDEUR",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"exchangeRates",
+						"USDEUR"
+					]
+				},
+				"description": "Get a JSON of specific Exchange Rate.\n\nResponse example:\n\nStartFragment\n\n``` json\n[\n    {\n        \"id\": 0,\n        \"baseCurrency\": {\n            \"id\": 0,\n            \"name\": \"United States dollar\",\n            \"code\": \"USD\",\n            \"sign\": \"$\"\n        },\n        \"targetCurrency\": {\n            \"id\": 1,\n            \"name\": \"Euro\",\n            \"code\": \"EUR\",\n            \"sign\": \"€\"\n        },\n        \"rate\": 0.99\n    }\n]\n\n ```\n\nEndFragment\n\nPossible HTTP-response code status:\n\n200 - Success.\n\n400 - Bad request. Currency pair is invalid.\n\n404 - Not found. Currency pair does not exist.\n\n404 - Not found. Currency code does not exist"
+			},
+			"response": []
+		},
+		{
+			"name": "Post new Exchange Rate",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "baseCurrencyCode ",
+							"value": "USD",
+							"type": "text"
+						},
+						{
+							"key": "targetCurrencyCode",
+							"value": "EUR",
+							"type": "text"
+						},
+						{
+							"key": "rate",
+							"value": "1.15",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/exchangeRates",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"exchangeRates"
+					]
+				},
+				"description": "Post new Exchange Rate in Database. Data is transfered in HTTP-response body (x-www-form-urlencoded). Form's fields - _baseCurrencyCode, targetCurrencyCode, rate._\n\nResponse will contain JSON of new Exchange Rate including id:\n\nStartFragment\n\n``` json\n{\n    \"id\": 0,\n    \"baseCurrency\": {\n        \"id\": 0,\n        \"name\": \"United States dollar\",\n        \"code\": \"USD\",\n        \"sign\": \"$\"\n    },\n    \"targetCurrency\": {\n        \"id\": 1,\n        \"name\": \"Euro\",\n        \"code\": \"EUR\",\n        \"sign\": \"€\"\n    },\n    \"rate\": 0.99\n}\n\n ```\n\nEndFragment\n\nPossible HTTP-response code status:\n\n200 - Success.\n\n400 - Bad request. One of required fields is empty.\n\n404 - Not found. Currency code does not exist.\n\n409 - Conflict. Exchange rate already exists."
+			},
+			"response": []
+		},
+		{
+			"name": "Update Exchange Rate",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "rate",
+							"value": "1.2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/exchangeRate/EURUSD",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"exchangeRate",
+						"EURUSD"
+					]
+				},
+				"description": "Update existing Exchange Rate in Database.Currency pair is defined in the request URL. Data is transfered in HTTP-response body (x-www-form-urlencoded). Form's field - _rate._\n\nResponse will contain JSON of updated Exchange Rate including id:\n\nStartFragment\n\n``` json\n{\n    \"id\": 0,\n    \"baseCurrency\": {\n        \"id\": 0,\n        \"name\": \"United States dollar\",\n        \"code\": \"USD\",\n        \"sign\": \"$\"\n    },\n    \"targetCurrency\": {\n        \"id\": 1,\n        \"name\": \"Euro\",\n        \"code\": \"EUR\",\n        \"sign\": \"€\"\n    },\n    \"rate\": 0.99\n}\n\n ```\n\nEndFragment\n\nPossible HTTP-response code status:\n\n200 - Success.\n\n400 - Bad request. Currency pair is invalid.\n\n400 - Bad request. Currency rate is absent\n\n404 - Not found. Currency pair does not exist."
+			},
+			"response": []
+		},
+		{
+			"name": "Convert from one currency to another",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/exchange?from=EUR&to=USD&amount=55",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"exchange"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "EUR"
+						},
+						{
+							"key": "to",
+							"value": "USD"
+						},
+						{
+							"key": "amount",
+							"value": "55"
+						}
+					]
+				},
+				"description": "Make exchange operation between two currencies. Data is transfered in URL-adress. Request's parameters - _from, to, amount._\n\nResponse will contain JSON of exchange operation result:\n\nStartFragment\n\n``` json\n{\n    \"baseCurrency\": {\n        \"id\": 0,\n        \"name\": \"United States dollar\",\n        \"code\": \"USD\",\n        \"sign\": \"$\"\n    },\n    \"targetCurrency\": {\n        \"id\": 1,\n        \"name\": \"Australian dollar\",\n        \"code\": \"AUD\",\n        \"sign\": \"A€\"\n    },\n    \"rate\": 1.45,\n    \"amount\": 10.00,\n    \"convertedAmount\": 14.50\n}\n\n ```\n\nEndFragment\n\nPossible HTTP-response code status:\n\n200 - Success.\n\n400 - Bad request. Currency pair is invalid.\n\n404 - Not found. Currency code does not exist.\n\n404 - Not found. Currency pair does not exist."
+			},
+			"response": []
+		}
+	]
+}
