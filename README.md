@@ -75,7 +75,7 @@ fields are `name`, `code`, `symbol`. Example of response (inserted record):
 ]
 ```
 
-#@ Exchange rates
+## Exchange rates
 
 #### GET `/exchangeRates`
 
