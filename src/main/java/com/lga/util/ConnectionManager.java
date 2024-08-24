@@ -1,31 +1,32 @@
 package com.lga.util;
 
 import com.lga.exceptions.ConnectionFailureException;
-import lombok.SneakyThrows;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import lombok.experimental.UtilityClass;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 @UtilityClass
 public class ConnectionManager {
-    private static final String URL = "jdbc:sqlite:C:/Users/glebl/OneDrive/Desktop/CurrencyExchanger-master/src/main/resources/database/CurrencyExchangerDataBase.db";
+    private static final HikariDataSource dataSource;
 
     static {
-        loadDriver();
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(PropertiesUtil.getDataBasePath());
+        config.setDriverClassName(PropertiesUtil.getDriverClassName());
+
+        config.setMaximumPoolSize(10);
+        config.setMaxLifetime(60000);
+        dataSource = new HikariDataSource(config);
     }
 
     public static Connection open() {
         try {
-            return DriverManager.getConnection(URL);
+            return dataSource.getConnection();
         } catch (SQLException e) {
             throw new ConnectionFailureException();
         }
-    }
-
-    @SneakyThrows
-    private static void loadDriver() {
-        Class.forName("org.sqlite.JDBC");
     }
 }
