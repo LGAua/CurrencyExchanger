@@ -56,7 +56,14 @@ public class ExchangeOperationService {
     }
 
     private Optional<ExchangeRateEntity> findReverseExchangeRate(Integer targetId, Integer baseId) {
-        return exchangeRateDao.findByBaseIdAndTargetId(targetId, baseId);
+        Optional<ExchangeRateEntity> exchangeRate = exchangeRateDao.findByBaseIdAndTargetId(targetId, baseId);
+        if (exchangeRate.isPresent()){
+            ExchangeRateEntity exchangeRateEntity = exchangeRate.get();
+            exchangeRateEntity.setRate(BigDecimal.ONE.divide(exchangeRateEntity.getRate(),DECIMAL64).setScale(2, HALF_UP));
+            return Optional.of(exchangeRateEntity);
+        } else {
+            return Optional.empty();
+        }
     }
 
     private Optional<ExchangeRateEntity> findCrossExchangeRate(Integer baseId, Integer targetId) {
